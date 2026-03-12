@@ -11,8 +11,8 @@ from aiogram.client.default import DefaultBotProperties
 logging.basicConfig(level=logging.INFO)
 
 # --- НАСТРОЙКИ (СЮДА ВСТАВЛЯТЬ КЛЮЧИ) ---
-BOT_TOKEN = "8788623434:AAGeWqZVWvMO1e8DTeJJD5QqLKPDFQYJOwU" 
-VT_API_KEY = "ed683ad3df5f07c05bf620569b1e4fbcb9946765272a09f771baf460a501fad6" 
+BOT_TOKEN = "your tg bot token" 
+VT_API_KEY = "your VIRUSTOTAL_API token" 
 
 bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
 dp = Dispatcher()
@@ -72,4 +72,5 @@ async def main():
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
+
     asyncio.run(main())
