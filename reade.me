@@ -1,0 +1,50 @@
+# Security Assessment Report: External Infrastructure Audit
+
+##  Project Overview
+This report outlines the results of an external security perimeter analysis (**Black Box** methodology). The primary goal was to identify critical vulnerabilities in network services and web server configurations that could lead to unauthorized access or data breaches.
+
+## 🛠Methodology & Tools
+The assessment combined automated scanning with manual verification to ensure accuracy.
+*   **Tools:** RoboShadow (Nmap engine), OWASP ZAP, Shodan.
+*   **Scope:** Public-facing IP addresses and web interfaces (Data has been anonymized for security).
+
+---
+
+##  Key Findings
+
+### 1. Vulnerable OpenSSH Service (Critical Risk)
+During the reconnaissance phase, an outdated version of the OpenSSH service was identified on port `22/tcp`. Further analysis confirmed 15 known vulnerabilities (CVEs).
+
+*   **Technical Details:** Service banner grabbing revealed a version susceptible to high-impact exploits.
+*   **Critical Threats:**
+    *   **CVE-2024-6387 (regreSSHion):** A Race Condition vulnerability that could allow an unauthenticated attacker to gain **root privileges**.
+    *   **CVE-2023-38408:** A Remote Code Execution (RCE) risk related to SSH agent forwarding.
+*   **Impact:** Total server compromise, sensitive data exfiltration, and potential lateral movement within the internal network.
+*   **Recommendation:** Immediately update OpenSSH to the latest stable version (9.8p1+) and implement IP whitelisting for SSH access.
+
+### 2. Missing Security Headers (Medium Risk)
+An analysis of the HTTP response headers (ports 80, 443) revealed a lack of modern browser-level security mechanisms.
+
+*   **Issue:** Missing `Content-Security-Policy` (CSP) and `Strict-Transport-Security` (HSTS) headers.
+*   **Threats:**
+    *   **XSS (Cross-Site Scripting):** Without CSP, attackers can inject malicious scripts to steal user session cookies.
+    *   **MITM (Man-in-the-Middle):** The absence of HSTS allows for "SSL Stripping" attacks, where an attacker intercepts traffic in plaintext.
+*   **Recommendation:** Configure the web server (Nginx/Apache) to enforce secure headers.
+
+---
+
+##  Risk Matrix
+
+| Vulnerability | Severity | Probability | Impact |
+| :--- | :--- | :--- | :--- |
+| **OpenSSH RCE (CVE-2024-6387)** |  **Critical** | Medium | Total System Takeover |
+| **Missing HSTS/CSP Headers** |  **Medium** | High | User Session Hijacking |
+| **Information Disclosure** |  **Low** | High | Infrastructure Recon |
+
+---
+
+##  Conclusion
+The infrastructure has a critical point of failure due to the lack of patch management for system services. Priority should be given to remediating the SSH vulnerability. Implementing web security headers will significantly decrease the success rate of client-side attacks.
+
+---
+*This report was prepared for educational and portfolio purposes.*
